@@ -46,6 +46,7 @@ class EditArticle(FetchArticleBase):
 
     def get(self, request, article_url):
         article = self.get_article_by_url(article_url)
+        return render(request, self.template_name, {'article': article})
 
     def post(self, request):
         pass
@@ -57,17 +58,18 @@ class DeleteArticle(FetchArticleBase):
 
     def get(self, request, article_url):
         article = self.get_article_by_url(article_url)
+        return render(request, self.template_name, {'article': article})
 
     def post(self, request):
         pass
 
 
 class ShowArticle(FetchArticleBase):
+    template_name = 'show_article.html'
 
     def get(self, request, article_url):
         article = self.get_article_by_url(article_url)
-        context = {'article': article}
-        return render(request, 'show_article.html', context)
+        return render(request, self.template_name, {'article': article})
 
 
 def recent_articles(request):
