@@ -12,7 +12,10 @@ setup_environ()
 # Setup shell stubs
 
 from google.appengine.tools import dev_appserver_main
-from google.appengine.tools import dev_appserver
+try:
+    from google.appengine.tools import dev_appserver as dev_appserver
+except ImportError:
+    from google.appengine.tools import old_dev_appserver as dev_appserver
 
 app_id = os.environ['APPLICATION_ID']
 
