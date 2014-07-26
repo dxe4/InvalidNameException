@@ -10,6 +10,7 @@ class Article(ndb.Model):
     text = ndb.StringProperty(indexed=False)
     url = ndb.StringProperty(indexed=True)
     created = ndb.DateTimeProperty(auto_now_add=True)
+    deleted = ndb.BooleanProperty()
 
     @classmethod
     def get_by_url(cls, url):
@@ -20,3 +21,15 @@ class Article(ndb.Model):
             raise DoesNotExist
 
         return article
+
+    @classmethod
+    def get_recent(cls, limit=5):
+        q = cls.query()
+        q = q.filter(cls.deleted != True)
+        q.order(-cls.created)
+        result = q.fetch(limit)
+
+        if not result:
+            raise DoesNotExist
+
+        return result
