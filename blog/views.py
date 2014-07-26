@@ -3,6 +3,7 @@ from django.views.generic import View
 from django.http import Http404, HttpResponse
 from .forms import ArticleForm
 from .models import Article, DoesNotExist
+from .utils import get_article_by_url
 
 
 class CreatArticle(View):
@@ -26,19 +27,23 @@ class CreatArticle(View):
 
 
 class EditArticle(View):
-    pass
+    def get(self, request, article_url):
+        article = get_article_by_url(article_url)
+
+    def post(self, request):
+        pass
 
 
 class DeleteArticle(View):
-    pass
+    def get(self, request, article_url):
+        article = get_article_by_url(article_url)
+
+    def post(self, request):
+        pass
 
 
 def show_article(request, article_url):
-    try:
-        article = Article.get_by_url(article_url)
-    except DoesNotExist:
-        raise Http404('Article with url {} does not exist'.format(article_url))
-
+    article = get_article_by_url(article_url)
     context = {'article': article}
     return render(request, 'show_article.html', context)
 
