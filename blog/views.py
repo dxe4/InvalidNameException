@@ -1,7 +1,6 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import View
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from .forms import ArticleForm
 from .models import Article, DoesNotExist
 
@@ -23,7 +22,15 @@ class CreatArticle(View):
         article = Article(**form.cleaned_data)
         article.put()
 
-        return HttpResponseRedirect('')
+        return redirect('blog:show_article', article_url=article.url)
+
+
+class EditArticle(View):
+    pass
+
+
+class DeleteArticle(View):
+    pass
 
 
 def show_article(request, article_url):
@@ -35,4 +42,22 @@ def show_article(request, article_url):
     context = {'article': article}
     return render(request, 'show_article.html', context)
 
+
+def recent_articles(request):
+    limit = request.GET.get('limit', 3)
+    if limit > 30:  # security reasons
+        return HttpResponse(status_code=400)
+
+    try:
+        articles = Article.get_recent(limit=limit)
+    except DoesNotExist:
+        raise Http404('No articles in the databse')
+
+    context = {'articles': articles}
+
+    return render(request, 'recent_articles.html', context)
+
+
 create_article = CreatArticle.as_view()
+delete_article = DeleteArticle.as_view()
+edit_article = EditArticle.as_view()
