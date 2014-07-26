@@ -3,12 +3,7 @@
 	<body>
 		<form method='post'>
 			{% csrf_token %}
-			<div>
-			    {{ form.title }}
-			</div>
-			<div>
-			    {{ form.text }}
-			</div>
+			{{ form }}
 			<input type="submit" value="Create">
 		</form>
 	</body>

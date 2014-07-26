@@ -33,10 +33,18 @@ class FetchArticleBase(View):
         except DoesNotExist:
             raise Http404('Article with url {} does not exist'.format(url))
 
-    def get(self, request, *args, **kwargs):
-        raise NotImplementedError
+    def get(self, request, article_url, fetch_form=False):
+        # Just to avoid boilerplate
+        article = self.get_article_by_url(article_url)
+        context = dict(article=article)
+
+        if fetch_form:
+            context['form'] = self.form_class(article.to_dict())
+
+        return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
+        # If not implemented then only get is allowed
         return HttpResponse(status_code=405)
 
 
@@ -45,31 +53,38 @@ class EditArticle(FetchArticleBase):
     template_name = 'edit_article.html'
 
     def get(self, request, article_url):
-        article = self.get_article_by_url(article_url)
-        return render(request, self.template_name, {'article': article})
+        return super(EditArticle, self).get(request, article_url,
+                                            fetch_form=True)
 
-    def post(self, request):
-        pass
+    def post(self, request, article_url):
+        if not request.POST:
+            return HttpResponse(status_code=422)
+
+        form = self.form_class(request.POST)
+
+        if not form.is_valid():
+            return redirect('blog:edit_article', article_url=article_url)
+
+        # for some reason this works :S
+        article = Article(**form.cleaned_data)
+        article.put()
+
+        return redirect('blog:show_article', article_url=article.url)
 
 
 class DeleteArticle(FetchArticleBase):
     form_class = ArticleForm
     template_name = 'delete_article.html'
 
-    def get(self, request, article_url):
+    def post(self, request, article_url):
         article = self.get_article_by_url(article_url)
-        return render(request, self.template_name, {'article': article})
+        article.key.delete()
 
-    def post(self, request):
-        pass
+        return redirect('blog:recent_articles')
 
 
 class ShowArticle(FetchArticleBase):
     template_name = 'show_article.html'
-
-    def get(self, request, article_url):
-        article = self.get_article_by_url(article_url)
-        return render(request, self.template_name, {'article': article})
 
 
 def recent_articles(request):

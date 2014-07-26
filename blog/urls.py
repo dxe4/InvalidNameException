@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import url, patterns
 
-
+# http://i.imgur.com/jwI5yqK.png
 urlpatterns = patterns(
     'blog.views',
     # view
