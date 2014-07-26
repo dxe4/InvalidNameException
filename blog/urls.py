@@ -4,6 +4,7 @@ from django.conf.urls.defaults import url, patterns
 urlpatterns = patterns(
     'blog.views',
     # view
+    # needs id to avoid url conflicts
     url(r'^article/(?P<article_url>[\w-]+)/show$',
         'show_article', {}, name='show_article'),
     # moderate
