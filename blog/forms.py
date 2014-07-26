@@ -1,4 +1,5 @@
 from django import forms
+from django.template.defaultfilters import slugify
 from google.appengine.ext import ndb
 
 
@@ -9,7 +10,10 @@ class ArticleForm(forms.Form):
     def clean(self):
         cleaned_data = super(ArticleForm, self).clean()
 
-        key = ndb.Key('Article', cleaned_data.get('title'))
+        url = slugify(cleaned_data['title'])
+        key = ndb.Key('Article', url)
+
         cleaned_data['key'] = key
+        cleaned_data['url'] = url
 
         return cleaned_data

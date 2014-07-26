@@ -1,8 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import View
+from django.http import Http404
 from .forms import ArticleForm
-from .models import Article
+from .models import Article, DoesNotExist
 
 
 class CreatArticle(View):
@@ -23,5 +24,15 @@ class CreatArticle(View):
         article.put()
 
         return HttpResponseRedirect('')
+
+
+def show_article(request, article_url):
+    try:
+        article = Article.get_by_url(article_url)
+    except DoesNotExist:
+        raise Http404('Article with url {} does not exist'.format(article_url))
+
+    context = {'article': article}
+    return render(request, 'show_article.html', context)
 
 create_article = CreatArticle.as_view()
