@@ -37,7 +37,7 @@ class FetchArticleBase(View):
         raise NotImplementedError
 
     def post(self, request, *args, **kwargs):
-        raise NotImplementedError
+        return HttpResponse(status_code=405)
 
 
 class EditArticle(FetchArticleBase):
