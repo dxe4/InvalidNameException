@@ -5,6 +5,10 @@ from .forms import ArticleForm
 from .models import Article, DoesNotExist
 
 
+def index(request):
+    return render(request, 'index.html', {})
+
+
 class CreatArticle(View):
     form_class = ArticleForm
     template_name = 'create_article.html'

@@ -3,6 +3,9 @@ from django.conf.urls.defaults import url, patterns
 # http://i.imgur.com/jwI5yqK.png
 urlpatterns = patterns(
     'blog.views',
+    # index
+    url(r'^$',
+        'index', {}, name='index'),
     # view
     # needs id to avoid url conflicts
     url(r'^article/(?P<article_url>[\w-]+)/show$',

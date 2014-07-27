@@ -198,5 +198,5 @@ LOGGING = {
 }
 
 ALLOWED_HOSTS = [
-    'djappeng1ne-beta.appspot.com'
+    'invalid-name-exception.appspot.com'
 ]
