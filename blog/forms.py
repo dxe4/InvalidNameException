@@ -10,6 +10,7 @@ class ArticleForm(forms.Form):
     def clean(self):
         cleaned_data = super(ArticleForm, self).clean()
 
+        # probably this has to go in the model
         url = slugify(cleaned_data['title'])
         key = ndb.Key('Article', url)
 

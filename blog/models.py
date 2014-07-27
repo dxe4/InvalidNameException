@@ -10,7 +10,7 @@ class Article(ndb.Model):
     text = ndb.StringProperty(indexed=False)
     url = ndb.StringProperty(indexed=True)
     created = ndb.DateTimeProperty(auto_now_add=True)
-    deleted = ndb.BooleanProperty()
+    # deleted = ndb.BooleanProperty()
 
     @classmethod
     def get_by_url(cls, url):
@@ -33,7 +33,7 @@ class Article(ndb.Model):
         Raises: DoesNotExist Exception
         '''
         q = cls.query()
-        q = q.filter(cls.deleted != True)
+        # q = q.filter(cls.deleted != True)
         q.order(-cls.created)
         result = q.fetch(limit)
 
