@@ -1,0 +1,5 @@
+{% load url from future %}
+<p>Title:</p>
+<a href="{% url 'blog:show_article' article_url=article.url %}"> {{ article.title }}</a>
+<p>Text</p>
+<p>{{ article.text }}</p>

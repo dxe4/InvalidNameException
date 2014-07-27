@@ -2,10 +2,7 @@
 <html lang="en">
 	<body>
 	{% for article in articles %}
-		<p>Title:</p>
-		<p>{{ article.title }}</p>
-		<p>Text</p>
-		<p>{{ article.text }}</p>
+		{% include 'inc/article.html' %}
 	{% endfor %}
 	</body>
 </html>
